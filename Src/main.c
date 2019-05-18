@@ -430,8 +430,22 @@ int main(void) {
       lastSpeedR = speedR;
     }
 
-
-
+    #ifdef DEBUG_SERIAL_USART3
+      if (inactivity_timeout_counter % 25 == 0) {
+        // ####### CALC BOARD TEMPERATURE #######
+        board_temp_adc_filtered = board_temp_adc_filtered * 0.99 + (float)adc_buffer.temp * 0.01;
+        board_temp_deg_c = ((float)TEMP_CAL_HIGH_DEG_C - (float)TEMP_CAL_LOW_DEG_C) / ((float)TEMP_CAL_HIGH_ADC - (float)TEMP_CAL_LOW_ADC) * (board_temp_adc_filtered - (float)TEMP_CAL_LOW_ADC) + (float)TEMP_CAL_LOW_DEG_C;
+  
+        // ####### DEBUG SERIAL OUT #######
+        setScopeChannel(2, (int)speedR);  // 3: output speed: 0-1000
+        setScopeChannel(3, (int)speedL);  // 4: output speed: 0-1000
+        setScopeChannel(4, (int)adc_buffer.batt1);  // 5: for battery voltage calibration
+        setScopeChannel(5, (int)(batteryVoltage * 100.0f));  // 6: for verifying battery voltage calibration
+        setScopeChannel(6, (int)board_temp_adc_filtered);  // 7: for board temperature calibration
+        setScopeChannel(7, (int)board_temp_deg_c);  // 8: for verifying board temperature calibration
+        consoleScope();
+      }
+    #endif
 
     if ((distance / 1345.0) - setDistance > 0.5 && (lastDistance / 1345.0) - setDistance > 0.5) { // Error, robot too far away!
       enable = 0;
