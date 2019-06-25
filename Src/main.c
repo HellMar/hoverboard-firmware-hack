@@ -394,8 +394,8 @@ int main(void) {
 
 
       // ####### MIXER #######
-      speedR = CLAMP(speed * SPEED_COEFFICIENT -  steer * STEER_COEFFICIENT, -900, 900);
-      speedL = CLAMP(speed * SPEED_COEFFICIENT +  steer * STEER_COEFFICIENT, -900, 900);
+      speedR = CLAMP(speed * SPEED_COEFFICIENT +  steer * STEER_COEFFICIENT, -900, 900);
+      speedL = CLAMP(speed * SPEED_COEFFICIENT -  steer * STEER_COEFFICIENT, -900, 900);
 
       // ####### SET OUTPUTS #######
       if ((speedL < lastSpeedL + 100 && speedL > lastSpeedL - 100) && (speedR < lastSpeedR + 100 && speedR > lastSpeedR - 100) && timeout < TIMEOUT) {
